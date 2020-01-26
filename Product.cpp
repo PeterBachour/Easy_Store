@@ -42,6 +42,6 @@ string Product::toString() {
 
 ostream& operator<<(ostream &stream, Product product)
 {
-    stream << product.toString() << endl;
+    stream << product.toString();
     return stream;
 }
