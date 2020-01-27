@@ -4,7 +4,8 @@ using namespace std;
 
 Store::Store() : m_products(vector<Product *>()) , m_clients(vector<Client *>()) ,m_orders(vector<Order *>())
 {
-	cmpt_clients = 0;
+    cmpt_clients = 0;
+	cmpt_orders = 0;
 }
 
 Store::~Store(){
@@ -137,4 +138,38 @@ void Store::modify_quantity_in_shopping_cart(string productTitle, int id_client,
     }
 }
 
-
+void Store::validate_client_order(string clientName, string clientFirstname){
+	cmpt_orders++;
+    for(Client* client : m_clients){
+        if (client->get_firstname() == clientFirstname && client->get_name() == clientName)
+            m_orders.push_back(new Order(cmpt_orders, client, client->get_products(), client->get_products_quantity()));
+    }
+}
+void Store::update_status_order(int order_id){
+	for(Order* order : m_orders){
+		if(order->get_order_id() == order_id){
+			order->set_status(true);
+		}
+	}
+}
+void Store::display_orders(){
+    cout << "You have " << m_orders.size() << " orders in your store." << endl; 
+    for(Order* order : m_orders)
+    {
+        cout << *order << endl;
+    }
+}
+void Store::display_orders_client(string clientName, string clientFirstname){
+    for(Order* order : m_orders){
+        if(order->get_client()->get_firstname() == clientFirstname && order->get_client()->get_name() == clientName){ 
+            cout << *order << endl;
+        }
+    }
+}
+void Store::display_orders_client(int client_id){
+    for(Order* order : m_orders){
+        if(order->get_client()->get_clientID() == client_id){ 
+            cout << *order << endl;
+        }
+    }
+}

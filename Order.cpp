@@ -5,13 +5,17 @@ Order::Order()
 {
 
 }
-Order::Order(Client* client, vector<Product*> orderedProducts) :m_client(client), m_status(false), m_orderedProducts(orderedProducts) {
+Order::Order(int order_id, Client* client, vector<Product*> orderedProducts, vector<int> orderedProducts_quantity) :
+	m_order_id(order_id), m_client(client), m_status(false), m_orderedProducts(orderedProducts), m_orderedProducts_quantity(orderedProducts_quantity) {
 
 }
 Order::~Order(){
 
 }
 
+int Order::get_order_id(){
+	return m_order_id;
+}
 
 Client* Order::get_client(){
 	return m_client;
@@ -20,6 +24,11 @@ Client* Order::get_client(){
 vector<Product*> Order::get_orderedProducts(){
 	return m_orderedProducts;
 }
+
+vector<int> Order::get_orderedProducts_quantity(){
+	return m_orderedProducts_quantity;
+}
+
 
 bool Order::get_status(){
 	return m_status;

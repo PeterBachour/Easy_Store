@@ -20,7 +20,8 @@ public:
     int get_clientID();
     string get_firstname();
     string get_name();
-    vector<Product*> get_productList();
+    vector<Product*> get_products();
+    vector<int> get_products_quantity();
 
     //setters
     void set_name(string name);
@@ -39,6 +40,7 @@ private:
     string m_firstname;
     string m_name;
     vector<Product*> m_products;
+    vector<int> m_products_quantity;
 };
 
 #endif

@@ -8,6 +8,25 @@ using namespace std;
 
 int main()
 {
+	
+	// Test special peter
+	// Store EasyStore;
+
+	// EasyStore.add_client("Bachour", "Peter");
+	// EasyStore.add_client("Coutisson", "Axel");
+
+	// EasyStore.add_product_to_store("PS4", "Console de jeu marque Sony", 10, 249.99);
+	// EasyStore.add_product_to_store("Switch", "Console de jeu Nintendo", 30,299.99);
+	// EasyStore.add_product_to_store("Xbox One", "Console de jeu Microsoft", 15,179.99);
+
+	// EasyStore.add_product_to_shopping_cart("PS4", 1);
+	// EasyStore.add_product_to_shopping_cart("PS4", 1);
+	// cout << "clients" << endl;
+	// EasyStore.display_clients();
+
+	// cout << endl << endl << "product" << endl;
+	// EasyStore.display_products();
+
 	/*
   	//Question 1.
   	cout << "Question 1 : Création de la classe Magasin." << endl;
@@ -97,6 +116,7 @@ int main()
 	EasyStore.add_product_to_shopping_cart("Xbox", 4);
 	*/
 
+	/*
 	//Question 6.
 	cout << "Question 6 : Création de la classe Commande." << endl;
 	Client peter(0, "Bachour", "Peter");
@@ -110,7 +130,38 @@ int main()
     cout << order << endl;
     order.set_status(true);
     cout << order << endl;
-   c
+   	*/
+	/*
+   	//Question 7.
+   	cout << "Question 7 : Ajout de fonctionnalités à Magasin." << endl;
+   	Store EasyStore;
+   	EasyStore.add_product_to_store("PS4", "Console de jeu Sony", 10,249.99);
+  	EasyStore.add_product_to_store("Switch", "Console de jeu Nintendo", 30,299.99);
+  	EasyStore.add_product_to_store("Xbox One", "Console de jeu Microsoft", 15,179.99);
+
+	EasyStore.add_client("Dom", "Ginhac");
+	EasyStore.add_client("Bill", "Gates");
+
+	EasyStore.add_product_to_shopping_cart("PS4", "Ginhac", "Dom");
+	EasyStore.add_product_to_shopping_cart("Xbox", "Ginhac", "Dom");
+
+	EasyStore.modify_quantity_in_shopping_cart("Xbox", "Ginhac", "Dom", 2);
+
+	EasyStore.validate_client_order("Ginhac", "Dom");
+	EasyStore.display_orders();
+
+	EasyStore.add_product_to_shopping_cart("Switch", "Gates", "Bill");
+	EasyStore.validate_client_order("Gates", "Bill");
+
+	EasyStore.display_orders_client("Gates","Bill");
+	EasyStore.display_products();
+	*/
+
+
+
+
+
+
 
 	return 0;
 }

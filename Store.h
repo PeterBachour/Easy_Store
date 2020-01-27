@@ -34,16 +34,20 @@ public:
     void add_client(string name, string firstname);
     void display_clients();
     void display_client(string name, string firstname);
-    void display_client(int id_client);
+    void display_client(int client_id);
 
     void add_product_to_shopping_cart(string productTitle, string name, string firstname);
-    void add_product_to_shopping_cart(string productTitle, int id_client);
+    void add_product_to_shopping_cart(string productTitle, int client_id);
 	void remove_product_from_shopping_cart(string productTitle, string name, string firstname);
-    void remove_product_from_shopping_cart(string productTitle, int id_client);
+    void remove_product_from_shopping_cart(string productTitle, int client_id);
     void modify_quantity_in_shopping_cart(string productTitle, string name, string firstname, int quantity);
-    void modify_quantity_in_shopping_cart(string productTitle, int id_client, int quantity);
+    void modify_quantity_in_shopping_cart(string productTitle, int client_id, int quantity);
 
-
+    void validate_client_order(string clientName, string clientFirstname);
+    void update_status_order(int order_id);
+    void display_orders();
+    void display_orders_client(string clientName, string clientFirstname);
+    void display_orders_client(int client_id);
 
 
 private:
@@ -51,6 +55,8 @@ private:
     vector<Client*> m_clients;
     vector<Order*> m_orders;
     int cmpt_clients;
+    int cmpt_orders;
+
 };
 
 
