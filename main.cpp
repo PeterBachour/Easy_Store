@@ -24,7 +24,7 @@ int main()
 	*/
 
 
-	
+	/*
 	//Question 3.
 	cout << "Question 3 : Ajout de fonctionnalités à Magasin." << endl;
 	Store EasyStore;
@@ -35,14 +35,14 @@ int main()
   	EasyStore.add_product_to_store("Xbox One", "Console de jeu Microsoft", 15,179.99);
 
   	// Display all the products
-  	// EasyStore.display_products();
+  	EasyStore.display_products();
 
   	// Update quantity of a product
-  	// EasyStore.update_product_quantity("Switch", 10);
+  	EasyStore.update_product_quantity("Switch", 10);
 
   	// Display the updated product
- 	// EasyStore.display_product("Switch");
- 	
+ 	EasyStore.display_product("Switch");
+ 	*/
 
 	/*
 	//Question 4.
@@ -73,8 +73,8 @@ int main()
   	cout <<  Xbox << endl;
   	*/
 
-
-  	//Question 5
+	/*
+  	//Question 5.
   	cout << "Question 5 : Ajout de fonctionnalités à Magasin." << endl;
   	// Add new clients
 	EasyStore.add_client("Dom", "Ginhac");
@@ -95,9 +95,22 @@ int main()
 
 	// Add a product with its title and add to a client identified by his uid
 	EasyStore.add_product_to_shopping_cart("Xbox", 4);
+	*/
 
-
-
+	//Question 6.
+	cout << "Question 6 : Création de la classe Commande." << endl;
+	Client peter(0, "Bachour", "Peter");
+  	Product PS4("PS4", "Console de jeu marque Sony", 10, 249.99);
+	Product Switsh("Switch", "Console de jeu Nintendo", 30,299.99);
+	Product Xbox("Xbox One", "Console de jeu Microsoft", 15,179.99);
+	peter.add_product(&PS4);
+	peter.add_product(&Switsh);
+	peter.add_product(&Xbox);
+    Order order(&peter, peter.get_productList());
+    cout << order << endl;
+    order.set_status(true);
+    cout << order << endl;
+   c
 
 	return 0;
 }
