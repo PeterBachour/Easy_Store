@@ -19,8 +19,8 @@ Once the installation is done you can either double click the "EasyStore" in the
 ./Easystore
 ```
 
-## Created By
-[Peter Bachour](peter_bachour@icloud.com)
+## Authors
+Peter Bachour (peter_bachour@icloud.com)
 
-[Axel Coutisson](axel.coutisson@hotmail.fr)
+Axel Coutisson (axel.coutisson@hotmail.fr)
 
