@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <stdio.h>
 #include "Product.h"
 #include "Client.h"
 #include "Order.h"
@@ -39,6 +41,166 @@ void afficheMenuOrder()
 int main()
 {
 	Store EasyStore;
+
+	string const fileproducts("produits.txt");
+	string const fileclients("clients.txt");
+	string const fileorders("orders.txt");
+
+
+	ifstream fichierp("produits.txt");
+	ifstream fichierc("clients.txt");
+	ifstream fichiero("orders.txt");
+	
+	//
+	// Load
+	//
+
+   	if(fichierp)
+   	{
+      	string ligne; //Une variable pour stocker les lignes lues
+
+      	while(getline(fichierp, ligne)) //Tant qu'on n'est pas à la fin, on lit
+      	{
+        	if(ligne != "")
+			{
+				string titre;
+				string desc;
+				int quantite;
+				float price;
+				titre = ligne;
+				getline(fichierp, desc);
+				getline(fichierp, ligne);
+				quantite = stoi(ligne);
+				getline(fichierp, ligne);
+				price = stof(ligne);
+				EasyStore.add_product_to_store(titre, desc,quantite, price);
+			}
+      	}
+   	}
+   else
+   		{
+      cout << "ERROR: Failed to load Products " << endl;
+   	}
+
+	if(fichierc)
+   	{
+      	string ligne; //Une variable pour stocker les lignes lues
+
+      	while(getline(fichierc, ligne)) //Tant qu'on n'est pas à la fin, on lit
+      	{
+        	if(ligne != "")
+			{
+				string name;
+				string firstname;
+				int id;
+				getline(fichierc, name);
+				getline(fichierc, firstname);
+				getline(fichierc, ligne);
+				id = stoi(ligne);
+				EasyStore.add_clientid(id,name,firstname);
+				getline(fichierc, ligne);
+				getline(fichierc, ligne);
+				while(ligne != "=quantite=")
+				{
+					string titre;
+					string desc;
+					int quantite;
+					float price;
+					titre = ligne;
+					getline(fichierc, desc);
+					getline(fichierc, ligne);
+					quantite = stoi(ligne);
+					getline(fichierc, ligne);
+					price = stof(ligne);
+					vector<Product*> ref = EasyStore.getProducts();
+					for(Product *tmp : ref )
+					{
+						if(tmp->getTitle() == titre && tmp->getDescription() == desc && tmp->getPrice() == price && tmp->getQuantity() == quantite)
+							EasyStore.add_product_to_shopping_cart(titre, name, firstname);
+					}
+					getline(fichierc, ligne);
+				}
+				getline(fichierc, ligne);
+				vector<int> quantite;
+				while(ligne != "=client=" && ligne != "")
+				{
+					quantite.push_back(stoi(ligne));
+					getline(fichierc, ligne);
+					//il manque la quantité
+
+					
+				}
+			}
+      	}
+   	}
+   	else
+   		{
+      cout << "ERROR: Failed to load Clients " << endl;
+   	}
+
+	if(fichiero)
+   	{
+      	string ligne; //Une variable pour stocker les lignes lues
+
+      	while(getline(fichiero, ligne)) //Tant qu'on n'est pas à la fin, on lit
+      	{
+        	if(ligne != "")
+			{
+				int idorder;   
+				getline(fichiero, ligne);
+				idorder = stoi(ligne);
+				getline(fichiero, ligne);
+
+				string name;
+				string firstname;
+				int id;
+				getline(fichierc, name);
+				getline(fichierc, firstname);
+				getline(fichierc, ligne);
+				id = stoi(ligne);
+				vector<Product*> product;
+				vector<int> quant;
+				getline(fichierc, ligne);
+				while(ligne != "=quantite=")
+				{
+					string titre;
+					string desc;
+					int quantite;
+					float price;
+					titre = ligne;
+					getline(fichierc, desc);
+					getline(fichierc, ligne);
+					quantite = stoi(ligne);
+					getline(fichierc, ligne);
+					price = stof(ligne);
+					vector<Product*> ref = EasyStore.getProducts();
+					for(Product *tmp : ref )
+					{
+						if(tmp->getTitle() == titre && tmp->getDescription() == desc && tmp->getPrice() == price && tmp->getQuantity() == quantite)
+							product.push_back(tmp);
+					}
+					getline(fichierc, ligne);
+				}
+				while(ligne != "=order=" && ligne != "")
+				{
+					quant.push_back(stoi(ligne));
+					getline(fichierc, ligne);
+				}
+				//Order tmp(idorder,);
+				//EasyStore.getOrders().push_back();
+				//il manque de chercher le client et d'inclure dans easystore
+			}
+      	}
+   	}
+   else
+   		{
+      cout << "ERROR: Failed to load Orders " << endl;
+   	}
+    
+	//
+	// MENU
+	//
+
 	int choose, subchoose;
 	bool stay = true, substay = true;
 	while(stay)
@@ -256,5 +418,97 @@ int main()
 				break;
 		}
 	}
+
+
+	//Sauvegarde
+	
+	if (remove("produits.txt") !=0)
+        cout<<"Remove operation failed"<<endl;
+    else
+        cout<<"produits.txt"<<" has been removed."<<endl;
+	
+	if (remove("clients.txt") !=0)
+        cout<<"Remove operation failed"<<endl;
+    else
+        cout<<"clients.txt"<<" has been removed."<<endl;
+	
+	if (remove("orders.txt") !=0)
+        cout<<"Remove operation failed"<<endl;
+    else
+        cout<<"orders.txt"<<" has been removed."<<endl;
+
+	
+
+	vector<Product*> sprod = EasyStore.getProducts();
+	vector<Client*> scli = EasyStore.getClients();
+	vector<Order*> sord = EasyStore.getOrders();
+
+	ofstream fluxp(fileproducts.c_str());
+    if(fluxp)    
+    {
+        for(Product *prod : sprod )
+		{
+			fluxp << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
+		}
+    }
+    else
+    {
+        cout << "ERROR: Failed to save Products." << endl;
+    }
+
+	ofstream fluxc(fileclients.c_str());
+    if(fluxc)    
+    {
+        for(Client *cli : scli )
+		{
+			fluxc << "=client=" << endl;
+			fluxc << cli->get_name() << endl << cli->get_firstname() << endl << cli->get_clientID() << endl;
+			fluxc << "=panier=" << endl;
+			vector<Product*> tmp = cli->get_products();
+			for(Product *prod : tmp )
+			{
+				fluxc << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
+			}
+			fluxc << "=quantite=" << endl;
+			vector<int> tmp1 = cli->get_products_quantity();
+			for(int quant : tmp1 )
+			{
+				fluxc << quant << endl;
+			}
+		}
+    }
+    else
+    {
+        cout << "ERROR: Failed to save Clients." << endl;
+    }
+
+	ofstream fluxo(fileorders.c_str());
+    if(fluxo)    
+    {
+        for(Order *ord : sord)
+		{
+			fluxo << "=order=" << endl;
+			fluxo << ord->get_order_id()<<endl;
+			fluxo << "=client=" << endl;
+			fluxo << ord->get_client()->get_name() << endl << ord->get_client()->get_firstname() << endl << ord->get_client()->get_clientID() << endl;
+			fluxo << ord->get_status();
+			vector<Product*> tmp = ord->get_orderedProducts();
+			for(Product *prod : tmp )
+			{
+				fluxo << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
+			}
+			fluxo << "=quantite=" << endl;
+			vector<int> tmp1 = ord->get_orderedProducts_quantity();
+			for(int quant : tmp1 )
+			{
+				fluxo << quant << endl;
+			}
+
+		}
+    }
+    else
+    {
+        cout << "ERROR: Failed to save Orders." << endl;
+    }
 	return 0;
 }
