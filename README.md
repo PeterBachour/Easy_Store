@@ -19,6 +19,11 @@ Once the installation is done you can either double click the "EasyStore" in the
 ./Easystore
 ```
 
+Once you have done managing your Store, you can check your:
+- Products in Products.txt 
+- Clients in Clients.txt
+- Orders in Orders.txt
+
 ## Authors
 Peter Bachour (peter_bachour@icloud.com)
 
