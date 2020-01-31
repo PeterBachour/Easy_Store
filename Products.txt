@@ -1,7 +1,7 @@
 Title               |Description                             |Quantity       |Price
 ------------------------------------------------------------------------------------------
 PS4                 |Console de Jeu Sony                     |20             |199.990005€
-Switch              |Console de Jeu Nintendo                 |19             |179.990005€
+Switch              |Console de Jeu Nintendo                 |18             |179.990005€
 XboxOne             |Console de Jeu Microsoft                |34             |299.989990€
 1                   |1                                       |1              |1.000000€
 ------------------------------------------------------------------------------------------
