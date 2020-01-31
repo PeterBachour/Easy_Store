@@ -1,0 +1,13 @@
+Client: Peter Bachour has 2 product(s).
+------------------------------------------------------------------------------------------
+PS4                 |Console de Jeu Sony                     |20             |199.990005€
+Switch              |Console de Jeu Nintendo                 |18             |179.990005€
+
+The order is not delivered yet.
+
+Client: Steve Jobs has 1 product(s).
+------------------------------------------------------------------------------------------
+Switch              |Console de Jeu Nintendo                 |18             |179.990005€
+
+The order was delivered successfully.
+
