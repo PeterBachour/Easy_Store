@@ -36,12 +36,22 @@ void Product::modifyQuantity(int quantity){
 }
 
 string Product::toString() {
-    return  m_title + "\t\t" + m_description + "\t\t[" + to_string(m_availableQuantity) +"]\t\t" + to_string(m_unitPrice) + " €";
+	string out = m_title;
+	for (unsigned int i = m_title.length(); i < 20; i++) 
+		out += " ";
+	out += "|" + m_description;
+	for (unsigned int i = m_description.length(); i < 40; i++) 
+		out += " ";
+	out += "|" +to_string(m_availableQuantity);
+	for (unsigned int i = to_string(m_availableQuantity).length(); i < 15; i++) 
+		out += " ";	
+	out += "|" + to_string(m_unitPrice) + "€" ;
+    return  out;
 }
 
 
 ostream& operator<<(ostream &stream, Product product)
 {
-    stream << product.toString();
+	stream << product.toString();
     return stream;
 }

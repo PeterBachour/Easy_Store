@@ -47,11 +47,7 @@ void Order::set_status(bool status){
 }
 
 ostream& operator<<(ostream& stream,  Order order){
-    stream << "The client is : " << *order.get_client() << endl;
-    stream << "The products ordered are : " << endl;
-    for (unsigned i = 0; i < order.get_orderedProducts().size(); i++) {
-		stream << *order.get_orderedProducts().at(i) << endl;
-    }
+    stream << *order.get_client() << endl;
     if(order.get_status()){
     	stream << "The order was delivered successfully." << endl;
     }else{

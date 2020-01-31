@@ -65,6 +65,7 @@ void Store::add_client(string name, string firstname){
 	cmpt_clients++;
 	m_clients.push_back(new Client(cmpt_clients, name, firstname));
 }
+
 void Store::display_clients(){
 	cout << "You have " << m_clients.size() << " clients in your store." << endl; 
 	for (Client *client : m_clients) {

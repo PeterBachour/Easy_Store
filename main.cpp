@@ -8,6 +8,9 @@
 #include "Client.h"
 #include "Order.h"
 #include "Store.h"
+#include <iomanip>
+#include <algorithm>
+
 using namespace std;
 
 //
@@ -16,22 +19,52 @@ using namespace std;
 
 void afficheMenu()
 {
-	cout << endl << "**************" <<  endl << "* Easy Store *" <<  endl << "**************" <<  endl << "Enter the right number corresponding to your choose" << endl << "1. Manage Store" << endl << "2. Manage Users" << endl << "3. Manage Orders" << endl << "4. Exit" << endl;
+	cout << endl << "**************" <<  endl << "* Easy Store *" <<  endl << "**************" <<  endl 
+	<< "Enter the right number corresponding to your choice" << endl 
+	<< "1. Manage Store" << endl 
+	<< "2. Manage CLients" << endl 
+	<< "3. Manage Orders" << endl 
+	<< "4. Exit" << endl;
 }
 
 void afficheMenuStore()
 {
-	cout << endl << "****************" <<  endl << "* Manage Store *" <<  endl << "****************" << endl <<  "Enter the right number corresponding to your choose" << endl << "1. Add product to the Store" << endl << "2. Display all products" << endl << "3. Search product by name" << endl << "4. Update product quantity" << endl << "5. return" << endl;
+	cout << endl << "****************" <<  endl << "* Manage Store *" <<  endl << "****************" << endl 
+	<<  "Enter the right number corresponding to your choice" << endl 
+	<< "1. Add product to the Store" << endl 
+	<< "2. Display all products" << endl 
+	<< "3. Search product by Title" << endl 
+	<< "4. Update product quantity" << endl 
+	<< "5. Return" << endl;
 }
 
 void afficheMenuUsers()
 {
-	cout << endl << "*****************" <<  endl << "* Manage Client *" <<  endl << "*****************" <<  endl << "Enter the right number corresponding to your choose" << endl << "1. Add client" << endl << "2. Display all clients" << endl << "3. Search client" << endl << "4. Search client by id" << endl << "5. Add product to basket" << endl << "6. Add product to basket by id" << endl << "7. remove product from basket" << endl << "8. Remove product from basket by id" << endl << "9. Modify product quantity in the basket" << endl << "10. Modify product quantity in the basket by id" << endl << "11. return" << endl;
+	cout << endl << "*****************" <<  endl << "* Manage Client *" <<  endl << "*****************" <<  endl 
+	<< "Enter the right number corresponding to your choice" << endl 
+	<< "1. Add client" << endl 
+	<< "2. Display all clients" << endl 
+	<< "3. Search client" << endl 
+	<< "4. Search client by id" << endl 
+	<< "5. Add product to basket" << endl 
+	<< "6. Add product to basket by client id" << endl 
+	<< "7. Remove product from basket" << endl 
+	<< "8. Remove product from basket by client id" << endl 
+	<< "9. Modify product quantity in the basket" << endl 
+	<< "10. Modify product quantity in the basket by client id" << endl 
+	<< "11. Return" << endl;
 }
 
 void afficheMenuOrder()
 {
-	cout << endl << "*****************" <<  endl << "* Manage Orders *" <<  endl << "*****************" <<  endl << "Enter the right number corresponding to your choose" << endl << "1. Valideat client order" << endl << "2. Update order status" << endl << "3. Display all orders" << endl << "4. Display client orders" << endl << "5. Display client orders by id" << endl << "6. return" << endl;
+	cout << endl << "*****************" <<  endl << "* Manage Orders *" <<  endl << "*****************" <<  endl 
+	<< "Enter the right number corresponding to your choice" << endl 
+	<< "1. Validate client order" << endl 
+	<< "2. Update order status" << endl 
+	<< "3. Display all orders" << endl 
+	<< "4. Display client orders" << endl 
+	<< "5. Display client orders by id" << endl 
+	<< "6. Return" << endl;
 }
 
 //
@@ -42,14 +75,14 @@ int main()
 {
 	Store EasyStore;
 
-	string const fileproducts("produits.txt");
-	string const fileclients("clients.txt");
-	string const fileorders("orders.txt");
+	string const fileproducts("Products.txt");
+	string const fileclients("Clients.txt");
+	string const fileorders("Orders.txt");
 
 
-	ifstream fichierp("produits.txt");
-	ifstream fichierc("clients.txt");
-	ifstream fichiero("orders.txt");
+	ifstream fichierp("Products.txt");
+	ifstream fichierc("Clients.txt");
+	ifstream fichiero("Orders.txt");
 	
 	//
 	// Load
@@ -61,139 +94,95 @@ int main()
 
       	while(getline(fichierp, ligne)) //Tant qu'on n'est pas à la fin, on lit
       	{
-        	if(ligne != "")
+        	if(ligne != "" && ligne.find("Title               |Description                             |Quantity       |Price") == string::npos &&
+        		ligne.find("------------") == string::npos)
 			{
 				string titre;
 				string desc;
+				string rest;
+				string rest1;
 				int quantite;
 				float price;
-				titre = ligne;
-				getline(fichierp, desc);
-				getline(fichierp, ligne);
-				quantite = stoi(ligne);
-				getline(fichierp, ligne);
-				price = stof(ligne);
-				EasyStore.add_product_to_store(titre, desc,quantite, price);
+
+
+				auto first = ligne.find("|");
+				titre = ligne.substr(0,first-1);
+				rest = ligne.substr(first+1);
+				desc = rest.substr(0, rest.find("|")-1);
+				rest1 = rest.substr(rest.find("|")+1);
+
+				quantite = stoi(rest1);
+				price = stof(rest1.substr(rest1.find("|")+1));
+
+				titre.erase(remove(titre.begin(), titre.end(), ' '), titre.end());
+				// desc.erase(remove(desc.begin(), desc.end(), ' '), desc.end());
+
+				EasyStore.add_product_to_store(titre, desc, quantite, price);
 			}
       	}
    	}
-   else
-   		{
-      cout << "ERROR: Failed to load Products " << endl;
+    else
+   	{
+      cout << "ERROR: Failed to load Products." << endl;
    	}
 
 	if(fichierc)
    	{
       	string ligne; //Une variable pour stocker les lignes lues
-
+		string name;
+      	string firstname;
+      	
       	while(getline(fichierc, ligne)) //Tant qu'on n'est pas à la fin, on lit
       	{
-        	if(ligne != "")
-			{
-				string name;
-				string firstname;
-				int id;
-				getline(fichierc, name);
-				getline(fichierc, firstname);
-				getline(fichierc, ligne);
-				id = stoi(ligne);
-				EasyStore.add_clientid(id,name,firstname);
-				getline(fichierc, ligne);
-				getline(fichierc, ligne);
-				while(ligne != "=quantite=")
-				{
-					string titre;
-					string desc;
-					int quantite;
-					float price;
-					titre = ligne;
-					getline(fichierc, desc);
-					getline(fichierc, ligne);
-					quantite = stoi(ligne);
-					getline(fichierc, ligne);
-					price = stof(ligne);
-					vector<Product*> ref = EasyStore.getProducts();
-					for(Product *tmp : ref )
-					{
-						if(tmp->getTitle() == titre && tmp->getDescription() == desc && tmp->getPrice() == price && tmp->getQuantity() == quantite)
-							EasyStore.add_product_to_shopping_cart(titre, name, firstname);
-					}
-					getline(fichierc, ligne);
-				}
-				getline(fichierc, ligne);
-				vector<int> quantite;
-				while(ligne != "=client=" && ligne != "")
-				{
-					quantite.push_back(stoi(ligne));
-					getline(fichierc, ligne);
-					//il manque la quantité
+      		if(ligne != "" && ligne.find("------------") == string::npos){
+      			if(ligne.find("Client") != string::npos) {
+      				string fullname = ligne.substr(ligne.find(" ")+1);
+        			firstname = fullname.substr(0, fullname.find(" "));
+        			string rest = fullname.substr(firstname.length()+1);
+        			name = rest.substr(0, rest.find(" "));
 
-					
+ 					EasyStore.add_client(name,firstname);
+				}else{
+					string titre =  ligne.substr(0,ligne.find(" "));
+					titre.erase(remove(titre.begin(), titre.end(), ' '), titre.end());
+					EasyStore.add_product_to_shopping_cart(titre, name, firstname);					
 				}
 			}
       	}
    	}
    	else
-   		{
+   	{
       cout << "ERROR: Failed to load Clients " << endl;
    	}
 
 	if(fichiero)
    	{
       	string ligne; //Une variable pour stocker les lignes lues
+		string name;
+      	string firstname;
+      	int cmp = 0;
 
       	while(getline(fichiero, ligne)) //Tant qu'on n'est pas à la fin, on lit
       	{
-        	if(ligne != "")
-			{
-				int idorder;   
-				getline(fichiero, ligne);
-				idorder = stoi(ligne);
-				getline(fichiero, ligne);
+      		if(ligne != "" && ligne.find("------------") == string::npos){
 
-				string name;
-				string firstname;
-				int id;
-				getline(fichierc, name);
-				getline(fichierc, firstname);
-				getline(fichierc, ligne);
-				id = stoi(ligne);
-				vector<Product*> product;
-				vector<int> quant;
-				getline(fichierc, ligne);
-				while(ligne != "=quantite=")
-				{
-					string titre;
-					string desc;
-					int quantite;
-					float price;
-					titre = ligne;
-					getline(fichierc, desc);
-					getline(fichierc, ligne);
-					quantite = stoi(ligne);
-					getline(fichierc, ligne);
-					price = stof(ligne);
-					vector<Product*> ref = EasyStore.getProducts();
-					for(Product *tmp : ref )
-					{
-						if(tmp->getTitle() == titre && tmp->getDescription() == desc && tmp->getPrice() == price && tmp->getQuantity() == quantite)
-							product.push_back(tmp);
-					}
-					getline(fichierc, ligne);
+      			if(ligne.find("Client") != string::npos) {
+      				string fullname = ligne.substr(ligne.find(" ")+1);
+        			firstname = fullname.substr(0, fullname.find(" "));
+        			string rest = fullname.substr(firstname.length()+1);
+        			name = rest.substr(0, rest.find(" "));
+					EasyStore.validate_client_order(name, firstname);
+					cmp++;
 				}
-				while(ligne != "=order=" && ligne != "")
-				{
-					quant.push_back(stoi(ligne));
-					getline(fichierc, ligne);
+				if(ligne.find("The order was delivered successfully.") != string::npos ){
+					EasyStore.update_status_order(cmp);
+
 				}
-				//Order tmp(idorder,);
-				//EasyStore.getOrders().push_back();
-				//il manque de chercher le client et d'inclure dans easystore
 			}
       	}
    	}
-   else
-   		{
+    else
+   	{
       cout << "ERROR: Failed to load Orders " << endl;
    	}
     
@@ -218,16 +207,17 @@ int main()
 					
 					if(subchoose == 1)
 					{
-						string title, description;
+						string title;
+						string description;
 						int quantity;
 						float price;
-						cout << endl << "title :" << endl;
-						cin >> title;
-						cout << endl << "description :" << endl;
-						cin >> description;
-						cout << endl << "quantity :" << endl;
+						cout << endl << "Title :" << endl;
+						getline(cin >> ws, title);
+						cout << endl << "Description :" << endl;
+						getline(cin >> ws, description);
+						cout << endl << "Quantity :" << endl;
 						cin >> quantity;
-						cout << endl << "price :" << endl;
+						cout << endl << "Price :" << endl;
 						cin >> price;
 						EasyStore.add_product_to_store(title,description,quantity,price);
 					}
@@ -238,8 +228,8 @@ int main()
 					if(subchoose == 3)
 					{
 						string product;
-						cout << endl << "Product name :" << endl;
-						cin >> product;
+						cout << endl << "Product Title :" << endl;
+						getline(cin >> ws, product);
 						EasyStore.display_product(product);
 					}
 					if(subchoose == 4)
@@ -247,7 +237,7 @@ int main()
 						string product;
 						int quantity;
 						cout << endl << "Product name :" << endl;
-						cin >> product;
+						getline(cin >> ws, product);
 						cout << endl << "Quantity :" << endl;
 						cin >> quantity;
 						EasyStore.update_product_quantity(product, quantity);
@@ -266,9 +256,9 @@ int main()
 					if(subchoose == 1)
 					{
 						string name, firstname;
-						cout << endl <<" Name :" << endl;
+						cout << endl <<"Name :" << endl;
 						cin >> name;
-						cout << endl <<" Firstname :" << endl;
+						cout << endl <<"Firstname :" << endl;
 						cin >> firstname;
 						EasyStore.add_client(name, firstname);
 					}
@@ -279,48 +269,53 @@ int main()
 					if(subchoose == 3)
 					{
 						string name, firstname;
-						cout << endl <<" Name :" << endl;
+						cout << endl <<"Name :" << endl;
 						cin >> name;
-						cout << endl <<" Firstname :" << endl;
+						cout << endl <<"Firstname :" << endl;
 						cin >> firstname;
+						cout << "The client you are searching for is: " << endl;
 						EasyStore.display_client(name, firstname);
 					}
 					if(subchoose == 4)
 					{
 						int id;
-						cout << endl <<" Client Id :" << endl;
+						cout << endl <<"Client Id :" << endl;
 						cin >> id;
+						cout << "The client you are searching for is: " << endl;
 						EasyStore.display_client(id);
 					}
 					if(subchoose == 5)
 					{
 						string producttitle, name, firstname;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Name :" << endl;
+						cout << endl <<"Name :" << endl;
 						cin >> name;
-						cout << endl <<" Firstname :" << endl;
+						cout << endl <<"Firstname :" << endl;
 						cin >> firstname;
 						EasyStore.add_product_to_shopping_cart(producttitle,name,firstname);
+						cout << "The product has been sucessfully added to your client. " << endl;
+
 					}
 					if(subchoose == 6)
 					{
 						string producttitle;
 						int id;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Client Id :" << endl;
+						cout << endl <<"Client Id :" << endl;
 						cin >> id;
 						EasyStore.add_product_to_shopping_cart(producttitle,id);
+						cout << "The product has been sucessfully added to your client. " << endl;
 					}
 					if(subchoose == 7)
 					{
 						string producttitle, name, firstname;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Name :" << endl;
+						cout << endl <<"Name :" << endl;
 						cin >> name;
-						cout << endl <<" Firstname :" << endl;
+						cout << endl <<"Firstname :" << endl;
 						cin >> firstname;
 						EasyStore.remove_product_from_shopping_cart(producttitle,name,firstname);
 					}
@@ -328,9 +323,9 @@ int main()
 					{
 						string producttitle;
 						int id;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Client Id :" << endl;
+						cout << endl <<"Client Id :" << endl;
 						cin >> id;
 						EasyStore.remove_product_from_shopping_cart(producttitle,id);
 					}
@@ -338,13 +333,13 @@ int main()
 					{
 						string producttitle, name, firstname;
 						int quantity;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Name :" << endl;
+						cout << endl <<"Name :" << endl;
 						cin >> name;
-						cout << endl <<" Firstname :" << endl;
+						cout << endl <<"Firstname :" << endl;
 						cin >> firstname;
-						cout << endl <<" Quantity :" << endl;
+						cout << endl <<"Quantity :" << endl;
 						cin >> quantity;
 						EasyStore.modify_quantity_in_shopping_cart(producttitle, name, firstname, quantity);
 					}
@@ -352,11 +347,11 @@ int main()
 					{
 						string producttitle;
 						int id, quantity;
-						cout << endl <<" Product Name :" << endl;
+						cout << endl <<"Product Name :" << endl;
 						cin >> producttitle;
-						cout << endl <<" Client Id:" << endl;
+						cout << endl <<"Client Id:" << endl;
 						cin >> id;
-						cout << endl <<" quantity :" << endl;
+						cout << endl <<"Quantity :" << endl;
 						cin >> quantity;
 						EasyStore.modify_quantity_in_shopping_cart(producttitle,id,quantity);
 					}
@@ -367,23 +362,23 @@ int main()
 				}
 				break;
 			case 3:
-			while(substay)
-			{
+				while(substay)
+				{
 				afficheMenuOrder();
 				cin >>subchoose;
 				if(subchoose == 1)
 				{
 					string name, firstname;
-					cout << endl <<" Client Name :" << endl;
+					cout << endl <<"Client Name :" << endl;
 					cin >> name;
-					cout << endl <<" Client Firstname :" << endl;
+					cout << endl <<"Client Firstname :" << endl;
 					cin >> firstname;
 					EasyStore.validate_client_order(name,firstname);
 				}
 				if(subchoose == 2)
 				{
 					int order;
-					cout << endl <<" Order Id :" << endl;
+					cout << endl <<"Order Id :" << endl;
 					cin >> order;
 					EasyStore.update_status_order(order);
 				}
@@ -394,16 +389,16 @@ int main()
 				if(subchoose == 4)
 				{
 					string name, firstname;
-					cout << endl <<" Client name :" << endl;
+					cout << endl <<"Client Name :" << endl;
 					cin >> name;
-					cout << endl <<" Client firstname :" << endl;
+					cout << endl <<"Client Firstname :" << endl;
 					cin >> firstname;
 					EasyStore.display_orders_client(name, firstname);
 				}
 				if(subchoose == 5)
 				{
 					int id;
-					cout << endl <<" Client Id :" << endl;
+					cout << endl <<"Client Id :" << endl;
 					cin >> id;
 					EasyStore.display_orders_client(id);
 				}
@@ -411,7 +406,7 @@ int main()
 				{
 					substay = false;
 				}
-			}	
+				}	
 				break;
 			case 4:
 				stay = false;
@@ -419,37 +414,21 @@ int main()
 		}
 	}
 
-
-	//Sauvegarde
-	
-	if (remove("produits.txt") !=0)
-        cout<<"Remove operation failed"<<endl;
-    else
-        cout<<"produits.txt"<<" has been removed."<<endl;
-	
-	if (remove("clients.txt") !=0)
-        cout<<"Remove operation failed"<<endl;
-    else
-        cout<<"clients.txt"<<" has been removed."<<endl;
-	
-	if (remove("orders.txt") !=0)
-        cout<<"Remove operation failed"<<endl;
-    else
-        cout<<"orders.txt"<<" has been removed."<<endl;
-
-	
-
 	vector<Product*> sprod = EasyStore.getProducts();
 	vector<Client*> scli = EasyStore.getClients();
 	vector<Order*> sord = EasyStore.getOrders();
 
 	ofstream fluxp(fileproducts.c_str());
     if(fluxp)    
-    {
+    {	
+    	fluxp << "Title               |Description                             |Quantity       |Price" << endl;
+    	fluxp << "------------------------------------------------------------------------------------------" << endl;
         for(Product *prod : sprod )
 		{
-			fluxp << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
+			fluxp << *prod << endl;
 		}
+		 fluxp << "------------------------------------------------------------------------------------------" << endl;
+
     }
     else
     {
@@ -461,20 +440,9 @@ int main()
     {
         for(Client *cli : scli )
 		{
-			fluxc << "=client=" << endl;
-			fluxc << cli->get_name() << endl << cli->get_firstname() << endl << cli->get_clientID() << endl;
-			fluxc << "=panier=" << endl;
-			vector<Product*> tmp = cli->get_products();
-			for(Product *prod : tmp )
-			{
-				fluxc << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
-			}
-			fluxc << "=quantite=" << endl;
-			vector<int> tmp1 = cli->get_products_quantity();
-			for(int quant : tmp1 )
-			{
-				fluxc << quant << endl;
-			}
+			fluxc << *cli << endl;		
+			fluxc << "------------------------------------------------------------------------------------------" << endl;
+
 		}
     }
     else
@@ -487,23 +455,7 @@ int main()
     {
         for(Order *ord : sord)
 		{
-			fluxo << "=order=" << endl;
-			fluxo << ord->get_order_id()<<endl;
-			fluxo << "=client=" << endl;
-			fluxo << ord->get_client()->get_name() << endl << ord->get_client()->get_firstname() << endl << ord->get_client()->get_clientID() << endl;
-			fluxo << ord->get_status();
-			vector<Product*> tmp = ord->get_orderedProducts();
-			for(Product *prod : tmp )
-			{
-				fluxo << prod->getTitle() << endl << prod->getDescription() << endl << prod->getQuantity() << endl << prod->getPrice() << endl;
-			}
-			fluxo << "=quantite=" << endl;
-			vector<int> tmp1 = ord->get_orderedProducts_quantity();
-			for(int quant : tmp1 )
-			{
-				fluxo << quant << endl;
-			}
-
+			fluxo << *ord << endl;
 		}
     }
     else
