@@ -8,14 +8,10 @@
 
 #include <fstream>
 #include <stdio.h>
-
-// #include "Save.h"
 #include "Display.h"
-// #include "Load.h"
 
 using namespace std;
 
-Store EasyStore;
 
 string readString(string s){
 	string p;
@@ -38,6 +34,7 @@ float readFloat(string s){
 
 int main()
 {
+	Store EasyStore;
 	Display d;
 	// 
 	// LOAD
